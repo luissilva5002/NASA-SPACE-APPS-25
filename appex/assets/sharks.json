@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Great White Shark",
+    "image": "assets/images/white.jpg"
+  },
+  {
+    "name": "Hammerhead Shark",
+    "image": "assets/images/hammerhead.jpg"
+  },
+  {
+    "name": "Tiger Shark",
+    "image": "assets/images/tiger.jpg"
+  }
+]

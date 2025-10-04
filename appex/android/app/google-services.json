@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "396265164729",
+    "project_id": "appex-f4b57",
+    "storage_bucket": "appex-f4b57.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:396265164729:android:9c5644f38ab3ec627a3068",
+        "android_client_info": {
+          "package_name": "com.example.appex"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-xc3IRaP7x8WUWQntPIStbiR199MOpnQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

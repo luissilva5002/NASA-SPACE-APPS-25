@@ -1,0 +1,17 @@
+[
+  {
+    "title": "Great White Shark spotted near California",
+    "summary": "Swimmers were evacuated after a shark was seen near the coast.",
+    "image": "assets/images/white.jpg"
+  },
+  {
+    "title": "Shark population rising in Australia",
+    "summary": "Marine biologists report an increase in tiger shark sightings.",
+    "image": "assets/images/tiger.jpg"
+  },
+  {
+    "title": "Scientists tag 50 new sharks for research",
+    "summary": "A new study is tracking the migration of hammerhead sharks.",
+    "image": "assets/images/hammerhead.jpg"
+  }
+]
