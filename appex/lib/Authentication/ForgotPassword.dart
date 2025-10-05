@@ -111,7 +111,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             onPressed: resetPassword,
                             style: ButtonStyle(
                               backgroundColor:
-                              WidgetStateProperty.all(Colors.black),
+                              WidgetStateProperty.all(Color(0xFF1C3A5D)),
                               padding: WidgetStateProperty.all(
                                   const EdgeInsets.symmetric(vertical: 14)),
                             ),

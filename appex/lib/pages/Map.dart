@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
+import 'DetailPage.dart';
+
 class HeatMapPage extends StatefulWidget {
   const HeatMapPage({super.key});
 
@@ -20,6 +22,10 @@ class _HeatMapPageState extends State<HeatMapPage> {
 
   List<Map<String, dynamic>> sharkSpecies = [];
   List<Map<String, dynamic>> sharkNews = [];
+
+  // 🔑 NEW: For search
+  final TextEditingController _searchController = TextEditingController();
+  String searchQuery = "";
 
   @override
   void initState() {
@@ -41,6 +47,19 @@ class _HeatMapPageState extends State<HeatMapPage> {
 
   @override
   Widget build(BuildContext context) {
+    // 🔑 Apply filtering here
+    final filteredSpecies = sharkSpecies.where((species) {
+      final name = species['name'].toString().toLowerCase();
+      return name.contains(searchQuery.toLowerCase());
+    }).toList();
+
+    final filteredNews = sharkNews.where((news) {
+      final title = news['title'].toString().toLowerCase();
+      final summary = news['summary'].toString().toLowerCase();
+      return title.contains(searchQuery.toLowerCase()) ||
+          summary.contains(searchQuery.toLowerCase());
+    }).toList();
+
     return Scaffold(
       body: Stack(
         children: [
@@ -100,7 +119,7 @@ class _HeatMapPageState extends State<HeatMapPage> {
             ],
           ),
 
-          // FLOATING SEARCH BAR
+
           Positioned(
             top: 40,
             left: 16,
@@ -108,16 +127,88 @@ class _HeatMapPageState extends State<HeatMapPage> {
             child: Material(
               elevation: 4,
               borderRadius: BorderRadius.circular(30),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search here...',
-                  prefixIcon: const Icon(Icons.search),
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 14,
+              child: Column(
+                mainAxisSize: MainAxisSize.min, // adapt height
+                children: [
+                  // Search TextField (normal padding to stay vertically centered)
+                  TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search sharks...',
+                      prefixIcon: const Icon(Icons.search),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 14, // keep vertical padding for vertical centering
+                      ),
+                      suffixIcon: searchQuery.isNotEmpty
+                          ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                            _searchController.clear();
+                            searchQuery = "";
+                          });
+                        },
+                      )
+                          : null,
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        searchQuery = value;
+                      });
+                    },
                   ),
-                ),
+
+                  // Suggestions (integrated smoothly)
+                  if (searchQuery.isNotEmpty)
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(30),
+                      ),
+                      child: Container(
+                        color: Colors.white,
+                        constraints: const BoxConstraints(maxHeight: 250),
+                        child: ListView(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          children: sharkSpecies
+                              .where((species) => species['name']
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchQuery.toLowerCase()))
+                              .map((species) => ListTile(
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(6),
+                              child: Image.asset(
+                                species['image'],
+                                width: 40,
+                                height: 40,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            title: Text(species['name']),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => SharkDetailsPage(
+                                    name: species['name'],
+                                    imageUrl: species['image'],
+                                    description: species['description'] ??
+                                        "No description available.",
+                                  ),
+                                ),
+                              );
+                            },
+                          ))
+                              .toList(),
+                        ),
+                      ),
+                    )
+                  else
+                    const SizedBox.shrink(), // no suggestions, no extra space
+                ],
               ),
             ),
           ),
@@ -168,15 +259,15 @@ class _HeatMapPageState extends State<HeatMapPage> {
                       ),
                     ),
 
-                    // Shark species horizontal list
+                    // Shark species horizontal list (filtered)
                     SizedBox(
                       height: 150,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        itemCount: sharkSpecies.length,
+                        itemCount: filteredSpecies.length,
                         itemBuilder: (context, index) {
-                          final species = sharkSpecies[index];
+                          final species = filteredSpecies[index];
                           return sharkSpeciesCard(
                               species['name'], species['image']);
                         },
@@ -194,8 +285,8 @@ class _HeatMapPageState extends State<HeatMapPage> {
                       ),
                     ),
 
-                    // News cards
-                    ...sharkNews.map((news) => sharkNewsCard(
+                    // News cards (filtered)
+                    ...filteredNews.map((news) => sharkNewsCard(
                       news['title'],
                       news['summary'],
                       news['image'],
@@ -276,8 +367,7 @@ class _HeatMapPageState extends State<HeatMapPage> {
                 const SizedBox(height: 6),
                 Text(
                   summary,
-                  style:
-                  const TextStyle(fontSize: 14, color: Colors.black87),
+                  style: const TextStyle(fontSize: 14, color: Colors.black87),
                 ),
               ],
             ),

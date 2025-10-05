@@ -278,7 +278,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           child: ElevatedButton(
                             onPressed: signUp,
                             style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(Colors.black),
+                              backgroundColor: WidgetStateProperty.all(Color(0xFF1C3A5D)),
                             ),
                             child: const Padding(
                               padding: EdgeInsets.symmetric(vertical: 14),

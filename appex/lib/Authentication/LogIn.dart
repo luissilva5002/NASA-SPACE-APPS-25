@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: signInWithEmail,
                           style: ButtonStyle(
                             backgroundColor:
-                            WidgetStateProperty.all(Colors.black),
+                            WidgetStateProperty.all(Color(0xFF1C3A5D))
                           ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 14),
