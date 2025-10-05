@@ -10,5 +10,9 @@
   {
     "name": "Tiger Shark",
     "image": "assets/images/tiger.jpg"
+  },
+  {
+    "name": "Port Jackson Shark",
+    "image": "assets/images/port_jackson.png"
   }
 ]
