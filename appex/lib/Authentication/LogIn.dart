@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 30),
                 const Text(
                   'Log into your account',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),
                   textAlign: TextAlign.left,
                 ),
                 const SizedBox(height: 15),

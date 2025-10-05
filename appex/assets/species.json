@@ -1,18 +1,22 @@
 [
   {
     "name": "Great White Shark",
-    "image": "assets/images/white.jpg"
+    "image": "assets/images/white.jpg",
+    "description": "The Great White Shark is a large predatory fish known for its powerful build, sharp teeth, and impressive hunting skills. It primarily feeds on marine mammals and is found in coastal and offshore waters worldwide."
   },
   {
     "name": "Hammerhead Shark",
-    "image": "assets/images/hammerhead.jpg"
+    "image": "assets/images/hammerhead.jpg",
+    "description": "Hammerhead Sharks are easily recognizable by their wide, hammer-shaped heads, which enhance their sensory perception. They are skilled hunters that feed on fish, squid, and other smaller sharks."
   },
   {
     "name": "Tiger Shark",
-    "image": "assets/images/tiger.jpg"
+    "image": "assets/images/tiger.jpg",
+    "description": "The Tiger Shark is a large, solitary predator named for the dark stripes along its body. It has a diverse diet, eating fish, seals, birds, and even inedible objects, making it known as the 'garbage eater' of the sea."
   },
   {
     "name": "Port Jackson Shark",
-    "image": "assets/images/port_jackson.png"
+    "image": "assets/images/port_jackson.png",
+    "description": "The Port Jackson Shark is a bottom-dwelling species native to southern Australia. It has a distinctive harness-like pattern and a blunt head, feeding mainly on mollusks, crustaceans, and small fish."
   }
 ]
