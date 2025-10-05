@@ -36,7 +36,7 @@ class _HomeState extends State<HomePage> {
     final List<Widget> pages = [
       HeatMapPage(),
       SharkAdoptionPage(),
-      Profile(),
+      MenuPage(),
     ];
 
     return Scaffold(
@@ -61,8 +61,8 @@ class _HomeState extends State<HomePage> {
           label: 'Donate',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
+          icon: Icon(Icons.settings),
+          label: 'Settings',
         ),
       ],
       currentIndex: _selectedIndex,

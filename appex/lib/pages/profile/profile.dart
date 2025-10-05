@@ -1,183 +1,210 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:appex/pages/profile/suredelete.dart';
+import 'package:appex/pages/profile/surelogout.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'menu.dart';
+import 'package:provider/provider.dart';
+import '../../providers/theme_provider.dart';
+import '../../theme/theme.dart';
+import 'edit_profile.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
-
-  @override
-  State<Profile> createState() => _ProfileWidgetState();
-}
-
-class _ProfileWidgetState extends State<Profile> {
-  User? user = FirebaseAuth.instance.currentUser;
-
-  List<String> userPhotos = [];
-  bool isLoading = true;
-
-  String name = 'unknown';
-  String surname = 'unknown';
-  String bio = 'No Bio...';
-  String email = 'unknown';
-  String creationDate = '${DateTime.now()}';
-
-  User? currentUser;
-
-  List<Map<String, dynamic>> userAnimals = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeProfileData();
-  }
-
-  Future<void> _initializeProfileData() async {
-    setState(() => isLoading = true);
-    await Future.wait([
-      _loadUserInfo(),
-    ]);
-    setState(() => isLoading = false);
-  }
-
-
-  Future<void> _loadUserInfo() async {
-    currentUser = FirebaseAuth.instance.currentUser;
-
-    if (currentUser == null) return;
-
-    setState(() {
-      isLoading = true;
-    });
-
-    DocumentSnapshot userInfo = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(currentUser!.uid)
-          .get();
-
-    if (userInfo.exists) {
-        setState(() {
-          name = userInfo['name'] ?? 'User123';
-          surname = userInfo['surname'] ?? 'User123';
-          email = userInfo['email'] ?? 'john.doe@gmail.com';
-        });
-    }
-
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-
-  Widget _buildAvatar() {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        CircleAvatar(
-          radius: 50,
-          backgroundImage: user?.photoURL != null
-              ? NetworkImage(user!.photoURL!)
-              : const AssetImage('assets/images/default_profile.png') as ImageProvider,
-        ),
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: InkWell(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsets.all(6),
-              decoration: const BoxDecoration(
-                color: Colors.teal,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.edit, color: Colors.white, size: 20),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+class MenuPage extends StatelessWidget {
+  const MenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        title: const Text("Menu"),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        foregroundColor: Theme.of(context).appBarTheme.foregroundColor,
         elevation: 0,
-        title: const Text("Profile"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.menu, color:  Theme.of(context).colorScheme.primary,),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MenuPage()),
-              );
-            },
-          ),
-        ],
       ),
-      body: isLoading
-        ? const Center(child: CircularProgressIndicator())
-        : SingleChildScrollView(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             const SizedBox(height: 20),
-            Center(child: _buildAvatar()),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(
-                  '$name, $surname',
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                )
-              ],
+            _buildThemeCard(context),
+            const SizedBox(height: 20),
+            _buildMenuCard(
+              context,
+              icon: Icons.help_outline,
+              title: "Help Center",
+              onTap: () {
+                // Navigate to help center
+              },
             ),
-            const SizedBox(height: 40),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Divider(thickness: 2, height: 2, color: Theme.of(context).colorScheme.tertiary),
+            const SizedBox(height: 20),
+            _buildMenuCard(
+              context,
+              icon: Icons.logout_outlined,
+              title: "Log Out",
+              onTap: () {
+                showDialog(
+                  context: context,
+                  barrierColor: Colors.black.withOpacity(0.4), // Blacked-out background
+                  builder: (context) => const SureLogout(),
+                );
+              },
             ),
-            const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SizedBox(
-                height: 300,
-                child: isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : GridView.count(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color:  Theme.of(context).colorScheme.tertiary,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Icon(Icons.add, size: 40, color:  Theme.of(context).colorScheme.primary),
-                      ),
-                    ),
-                    // Then display the photos (if any)
-                    ...userPhotos.map((url) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          url,
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-              ),
+            const SizedBox(height: 20),
+            _buildMenuCard(
+              context,
+              icon: Icons.delete,
+              title: "Delete Account",
+              onTap: () {
+                showDialog(
+                  context: context,
+                  barrierColor: Colors.black.withOpacity(0.4), // Blacked-out background
+                  builder: (context) => const SureDelete(),
+                );
+              },
+
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildMenuCard(
+      BuildContext context, {
+        required IconData icon,
+        required String title,
+        required VoidCallback onTap,
+      }) {
+    return Card(
+      elevation: 2,
+      color: Theme.of(context).cardColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(
+          color: Theme.of(context).dividerColor.withOpacity(0.1),
+          width: 1,
+        ),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  icon,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).iconTheme.color?.withOpacity(0.6),
+                size: 16,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildThemeCard(BuildContext context) {
+    return Card(
+      elevation: 2,
+      color: Theme.of(context).cardColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(
+          color: Theme.of(context).dividerColor.withOpacity(0.1),
+          width: 1,
+        ),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(15),
+        onTap: () {}, // Optional: Add tap to toggle
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.dark_mode_outlined,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  "Dark Theme",
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              const SizedBox(
+                width: 50,
+                child: ThemeSwitch(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ThemeSwitch extends StatelessWidget {
+  const ThemeSwitch({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    return SwitchTheme(
+      data: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith<Color>(
+              (Set<WidgetState> states) {
+            if (themeProvider.themeData == darkMode) {
+              return Theme.of(context).colorScheme.onPrimary;
+            }
+            return Theme.of(context).colorScheme.primary;
+          },
+        ),
+        trackColor: WidgetStateProperty.resolveWith<Color>(
+              (Set<WidgetState> states) {
+            return states.contains(WidgetState.selected)
+                ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
+                : Colors.grey.withOpacity(0.5);
+          },
+        ),
+      ),
+      child: Switch(
+        value: themeProvider.themeData == darkMode,
+        onChanged: (bool value) {
+          Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+        },
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
     );
   }

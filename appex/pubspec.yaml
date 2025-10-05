@@ -71,7 +71,9 @@ flutter:
     - assets/sharks.json
     - assets/news.json
     - assets/species.json
+    - assets/images/background.jpg
     - assets/images/
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
