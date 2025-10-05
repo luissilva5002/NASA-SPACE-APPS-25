@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../HomePage.dart';
+
 
 class SureDelete extends StatefulWidget {
   const SureDelete({super.key});
@@ -58,13 +60,23 @@ class _SureDeleteState extends State<SureDelete> {
   }
 
   Future<void> _confirmDelete() async {
-    deleteUserData();
     try {
+      // Re-authenticate first
       await reauthenticateUser(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
+
+      // Delete Firestore data
+      await deleteUserData();
+
+      // Delete Firebase Auth account
       await deleteUserAccount();
+
+      // Redirect to homepage
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const HomePage()), // Replace HomePage() with your actual homepage widget
+      );
 
     } catch (e) {
       // Handle errors and provide feedback to the user

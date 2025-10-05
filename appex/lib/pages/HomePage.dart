@@ -1,5 +1,6 @@
 import 'package:appex/pages/profile/profile.dart';
 import 'package:flutter/material.dart';
+import 'Donate.dart';
 import 'Map.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,6 +35,7 @@ class _HomeState extends State<HomePage> {
 
     final List<Widget> pages = [
       HeatMapPage(),
+      SharkAdoptionPage(),
       Profile(),
     ];
 

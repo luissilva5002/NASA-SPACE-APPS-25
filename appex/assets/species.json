@@ -1,14 +1,14 @@
 [
   {
-    "name": "Missan",
+    "name": "Great White Shark",
     "image": "assets/images/white.jpg"
   },
   {
-    "name": "David",
+    "name": "Hammerhead Shark",
     "image": "assets/images/hammerhead.jpg"
   },
   {
-    "name": "Cotrim",
+    "name": "Tiger Shark",
     "image": "assets/images/tiger.jpg"
   }
 ]

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,8 +29,6 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
-  DateTime? _selectedDate;
-
 
   Future<void> signUp() async {
     final isValid = formKey.currentState!.validate();
@@ -47,11 +46,27 @@ class _SignUpPageState extends State<SignUpPage> {
     );
 
     try {
+      // 1️⃣ Create user in Firebase Auth
+      UserCredential userCredential =
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
+
+      User? user = userCredential.user;
+      if (user != null) {
+        // 2️⃣ Create user document in Firestore
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'uid': user.uid,
+          'name': nameController.text.trim(),
+          'surname': surnameController.text.trim(),
+          'email': emailController.text.trim(),
+        });
+      }
+
+      // 3️⃣ Close loading dialog and navigate
       navigatorKey.currentState?.popUntil((route) => route.isFirst);
+
     } on FirebaseAuthException catch (e) {
       Navigator.of(context).pop();
       Utils.showSnackBar(e.message ?? 'An error occurred during signup');

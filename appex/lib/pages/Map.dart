@@ -35,7 +35,7 @@ class _HeatMapPageState extends State<HeatMapPage> {
 
   Future<void> loadData() async {
     final speciesData =
-    jsonDecode(await rootBundle.loadString('assets/sharks.json'));
+    jsonDecode(await rootBundle.loadString('assets/species.json'));
     final newsData =
     jsonDecode(await rootBundle.loadString('assets/news.json'));
 
@@ -118,7 +118,6 @@ class _HeatMapPageState extends State<HeatMapPage> {
               ),
             ],
           ),
-
 
           Positioned(
             top: 40,
@@ -251,7 +250,7 @@ class _HeatMapPageState extends State<HeatMapPage> {
                     const Padding(
                       padding: EdgeInsets.all(16.0),
                       child: Text(
-                        "🦈 Shark Species",
+                        "Shark Species",
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -277,7 +276,7 @@ class _HeatMapPageState extends State<HeatMapPage> {
                     const Padding(
                       padding: EdgeInsets.all(16.0),
                       child: Text(
-                        "🦈 Shark News",
+                        "Shark News",
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,

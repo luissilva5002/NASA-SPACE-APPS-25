@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'menu.dart';
 
 class Profile extends StatefulWidget {
@@ -19,6 +17,7 @@ class _ProfileWidgetState extends State<Profile> {
   bool isLoading = true;
 
   String name = 'unknown';
+  String surname = 'unknown';
   String bio = 'No Bio...';
   String email = 'unknown';
   String creationDate = '${DateTime.now()}';
@@ -58,10 +57,9 @@ class _ProfileWidgetState extends State<Profile> {
 
     if (userInfo.exists) {
         setState(() {
-          name = userInfo['display_name'] ?? 'User123';
-          bio = userInfo['bio'] ?? 'No Bio...';
+          name = userInfo['name'] ?? 'User123';
+          surname = userInfo['surname'] ?? 'User123';
           email = userInfo['email'] ?? 'john.doe@gmail.com';
-          creationDate = userInfo['created_time'] ?? '${DateTime.now()}';
         });
     }
 
@@ -127,17 +125,14 @@ class _ProfileWidgetState extends State<Profile> {
             const SizedBox(height: 20),
             Center(child: _buildAvatar()),
             const SizedBox(height: 16),
-            Text(
-              name,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16.0),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                bio,
-                style: TextStyle(fontSize: 14, color:  Theme.of(context).colorScheme.primary),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  '$name, $surname',
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                )
+              ],
             ),
             const SizedBox(height: 40),
             Padding(
