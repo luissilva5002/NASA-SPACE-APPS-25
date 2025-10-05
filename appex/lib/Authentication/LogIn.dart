@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:email_validator/email_validator.dart';
 
-import '../HomePage.dart';
-import '../Utils/utils.dart';
+import '../pages/HomePage.dart';
+import '../utils/utils.dart';
 import 'ForgotPassword.dart';
 
 

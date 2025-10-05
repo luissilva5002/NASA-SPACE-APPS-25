@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-
 import 'map.dart';
 
 class HomePage extends StatefulWidget {

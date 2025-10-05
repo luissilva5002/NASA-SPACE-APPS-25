@@ -3,10 +3,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import '../../main.dart';
-import '../Utils/dateInput.dart';
-import '../Utils/utils.dart';
+import '../utils/utils.dart';
 
 class SignUpPage extends StatefulWidget {
   final Function() onClickedSignIn;

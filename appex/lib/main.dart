@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'Authentication/Auth.dart';
-import 'HomePage.dart';
+import 'pages/HomePage.dart';
 import 'Utils/utils.dart';
 
 Future<void> main() async {

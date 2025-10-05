@@ -147,12 +147,23 @@ class _HeatMapPageState extends State<HeatMapPage> {
                     // Grab handle
                     Center(
                       child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 12),
+                        margin: const EdgeInsets.only(bottom: 12),
                         height: 5,
                         width: 40,
                         decoration: BoxDecoration(
                           color: Colors.grey[400],
                           borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+
+                    const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        "🦈 Shark Species",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
